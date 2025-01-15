@@ -14,24 +14,31 @@ function App() {
   const [weatherData, setWeatherData] = useState(null);
   const [activeTab, setActiveTab] = useState<"Today" | "Week">("Today");
 
+  const previousLocationRef = useRef<Location | null>(null);
+
   const handleTabChange = (tabName: "Today" | "Week") => {
     setActiveTab(tabName); // Update the parent's state
   };
-
-  useEffect(() => {
+  const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
-          setLocation({latitude, longitude });
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          console.log(location);
         },
-        (err) => {
-          setError("Unable to retrieve location: " + err.message);
+        (error) => {
+          console.error("Error getting location", error);
         }
       );
     } else {
-      setError("Geolocation is not supported by this browser.");
+      console.error("Geolocation is not supported by this browser.");
     }
+  };
+  useEffect(() => {
+    getLocation();
   }, []);
 
   useEffect(() => {
@@ -60,7 +67,7 @@ function App() {
   return (
     <div className="container min-h-screen mx-auto flex flex-col md:flex-row justify-center">
     { weatherData ? (
-      <Sidebar weatherData={weatherData} />
+      <Sidebar weatherData={weatherData} getLocation={getLocation} />
     ) : (
       <p>Loading...</p>
     )

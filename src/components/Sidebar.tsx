@@ -2,12 +2,15 @@ import { IoIosSearch } from "react-icons/io";
 import { MdLocationSearching } from "react-icons/md";
 import { FiCloud } from "react-icons/fi";
 import { FiCloudRain } from "react-icons/fi";
+import { useState } from "react";
 
-export default function Sidebar({weatherData} : { weatherData: unknown }) {
+export default function Sidebar({weatherData , getLocation}) {
+  const [location, setLocation] = useState(null);
 
   const today = new Date().toLocaleString('en-US', { weekday: 'long' });
   const data = weatherData.list[0];
-
+  const city = weatherData?.city?.name || "Uknown";
+  const country = weatherData?.city?.country || "Uknown";
   return (
     <aside className="w-full md:w-1/3 lg:w-1/4 bg-white md:rounded-l-3xl p-4 flex flex-col justify-between">
       {/* LOCATION SEARCH */}
@@ -20,7 +23,7 @@ export default function Sidebar({weatherData} : { weatherData: unknown }) {
             placeholder="Search for location..."
           />
         </div>  
-        <button>
+        <button onClick={getLocation}>
           <MdLocationSearching className="text-2xl hover:text-blue-500" />
         </button>
       </section>
@@ -50,7 +53,7 @@ export default function Sidebar({weatherData} : { weatherData: unknown }) {
         <div className="w-full h-48 md:h-52 rounded-3xl overflow-hidden relative">
           <img src="town.jpg" alt="" className="w-full h-full object-cover" />
           <p className="absolute inset-0 flex items-center justify-center text-3xl text-white bg-black/30 rounded-3xl">
-            {weatherData.city.name + ", " + weatherData.city.country}
+            {city + ", " + country}
           </p>
         </div>
       </section>
