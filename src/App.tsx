@@ -3,10 +3,13 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import TabButton from "./components/TabButton";
 import DegreeButton from "./components/DegreeButton";
-import WeatherCard from "./components/WeatherCard";
-import { getWeatherIcon } from "./utils/getWeatherIcon";
+
+type Location = {
+  latitude: number;
+  longitude: number;
+}
 function App() {
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState<Location | null>(null);
   const [error, setError] = useState("");
   const [weatherData, setWeatherData] = useState(null);
   const [activeTab, setActiveTab] = useState<"Today" | "Week">("Today");
@@ -56,7 +59,14 @@ function App() {
 
   return (
     <div className="container min-h-screen mx-auto flex flex-col md:flex-row justify-center">
-    <Sidebar />
+    { weatherData ? (
+      <Sidebar weatherData={weatherData} />
+    ) : (
+      <p>Loading...</p>
+    )
+
+    }
+
     <main className="flex-1 bg-gray-100 md:rounded-r-3xl p-4">
       <header>
         <section className="flex justify-between items-center">
@@ -80,7 +90,8 @@ function App() {
       </header>
       <section>
           {weatherData ? (
-            // <WeatherCard icon={getWeatherIcon(weatherData.weather[0].main)} maxTemp = {weatherData.main.temp_max} minTemp = {weatherData.main.temp_min}/>
+            // <WeatherCard icon={getWeatherIcon(weatherData.weather[0].main)} maxTemp = {wea
+            // therData.main.temp_max} minTemp = {weatherData.main.temp_min}/>
             <p> Data</p>
           ) : (
             <p>loading...</p>

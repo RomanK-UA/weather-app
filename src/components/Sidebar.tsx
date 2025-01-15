@@ -3,7 +3,11 @@ import { MdLocationSearching } from "react-icons/md";
 import { FiCloud } from "react-icons/fi";
 import { FiCloudRain } from "react-icons/fi";
 
-export default function Sidebar({weatherData}) {
+export default function Sidebar({weatherData} : { weatherData: unknown }) {
+
+  const today = new Date().toLocaleString('en-US', { weekday: 'long' });
+  const data = weatherData.list[0];
+
   return (
     <aside className="w-full md:w-1/3 lg:w-1/4 bg-white md:rounded-l-3xl p-4 flex flex-col justify-between">
       {/* LOCATION SEARCH */}
@@ -25,28 +29,28 @@ export default function Sidebar({weatherData}) {
       <section className="flex flex-col items-center gap-4 border-b-2 border-gray-300 py-4">
         <img src="/icons/cloudy-day-1.svg" alt="icon" className="w-64 h-64" />
         <p className="text-5xl md:text-6xl lg:text-8xl self-start">
-          <span className="">12</span><sup>&deg;</sup>
+          <span className="">{data.main.temp.toFixed()}</span><sup>&deg;</sup>
           <sup>C</sup>
         </p>
-        <p className="text-3xl self-start">Monday, 16:00</p>
+        <p className="text-3xl self-start">{today}</p>
       </section>
 
       {/* WEATHER DETAILS */}
       <section className="flex flex-col md:flex-row md:justify-between py-4 gap-4">
         <div className="flex items-center py-2">
           <FiCloud className="text-2xl mr-2" />
-          <span>Mostly Cloudy</span>
+          <span>{data.weather[0].main}</span>
         </div>
         <div className="flex items-center py-2">
           <FiCloudRain className="text-2xl mr-2 text-blue-600" />
-          <span>Rain - 30%</span>
+          <span>Rain - {data.main.humidity}%</span>
         </div>
       </section>
       <section className="flex justify-center">
         <div className="w-full h-48 md:h-52 rounded-3xl overflow-hidden relative">
           <img src="town.jpg" alt="" className="w-full h-full object-cover" />
           <p className="absolute inset-0 flex items-center justify-center text-3xl text-white bg-black/30 rounded-3xl">
-            London
+            {weatherData.city.name + ", " + weatherData.city.country}
           </p>
         </div>
       </section>
