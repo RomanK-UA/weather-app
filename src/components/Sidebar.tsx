@@ -2,15 +2,12 @@ import { IoIosSearch } from "react-icons/io";
 import { MdLocationSearching } from "react-icons/md";
 import { FiCloud } from "react-icons/fi";
 import { FiCloudRain } from "react-icons/fi";
-import { useState } from "react";
 
-export default function Sidebar({weatherData , getLocation}) {
-  const [location, setLocation] = useState(null);
-
+export default function Sidebar({ weatherData, getLocation }) {
   const today = new Date().toLocaleString('en-US', { weekday: 'long' });
   const data = weatherData.list[0];
-  const city = weatherData?.city?.name || "Uknown";
-  const country = weatherData?.city?.country || "Uknown";
+  const city = weatherData?.city?.name || "Unknown";
+  const country = weatherData?.city?.country || "Unknown";
   return (
     <aside className="w-full md:w-1/3 lg:w-1/4 bg-white md:rounded-l-3xl p-4 flex flex-col justify-between">
       {/* LOCATION SEARCH */}
@@ -22,7 +19,7 @@ export default function Sidebar({weatherData , getLocation}) {
             className="outline-none bg-transparent w-full text-xs"
             placeholder="Search for location..."
           />
-        </div>  
+        </div>
         <button onClick={getLocation}>
           <MdLocationSearching className="text-2xl hover:text-blue-500" />
         </button>

@@ -1,9 +1,11 @@
+import { memo } from "react";
+
 type TabButtonProps = {
     tabName: string;
     isActive: boolean;
     onClick: () => void;
 }
-export default function TabButton({ tabName, isActive, onClick }: TabButtonProps) {
+const TabButton = memo(({ tabName, isActive, onClick }: TabButtonProps) => {
   return (
     <button
       className={`text-xl md:text-2xl lg:text-3xl font-semibold py-2 px-4 ${
@@ -14,4 +16,6 @@ export default function TabButton({ tabName, isActive, onClick }: TabButtonProps
       {tabName}
     </button>
   );
-}
+})
+
+export default TabButton;
