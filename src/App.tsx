@@ -3,7 +3,8 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import TabButton from "./components/TabButton";
 import DegreeButton from "./components/DegreeButton";
-
+import filterByCurrentDay from "./utils/filterByCurrentDay";
+import WeeklyForecast from "./components/WeeklyForecast";
 type Location = {
   latitude: number;
   longitude: number;
@@ -15,11 +16,15 @@ function App() {
   const [weatherData, setWeatherData] = useState(null);
   const [activeTab, setActiveTab] = useState<"Today" | "Week">("Today");
   const prevLocation = useRef<Location | null>(null);
+
+  const todayWeather = weatherData ? filterByCurrentDay(weatherData.list) : [];
+
+
   const handleTabChange = useCallback((tabName: "Today" | "Week") => {
     setActiveTab(tabName);
   }, []);
 
-  const getLocation = () => {
+  const getLocation = useCallback(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -27,20 +32,20 @@ function App() {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
-          console.log(location);
         },
         (error) => {
           console.error("Error getting location", error);
+          setError("Error getting location");
         }
       );
     } else {
-      console.error("Geolocation is not supported by this browser.");
+      setError("Geolocation is not supported by this browser.");
     }
-  };
+  }, []);
 
   useEffect(() => {
     getLocation();
-  }, []);
+  }, [getLocation]);
 
   useEffect(() => {
     if(  location?.latitude === prevLocation.current?.latitude &&
@@ -99,13 +104,30 @@ function App() {
             </div>
           </section>
         </header>
-        <main>
+        { activeTab === "Today" ? (
+          <section>
+            Today
+          </section>
+         ) : (
+          <section>
+            <WeeklyForecast data={weatherData} />
+          </section>
+         )
+
+        }
+        {/* Today's highlights */}
+        <section>
           {weatherData ? (
-            <p> Data</p>
+             todayWeather.map((item) => (
+              <div key={item.dt} className="flex justify-between items-center border-b-2 border-gray-300 py-4">
+                <p>{item.dt_txt}</p>
+                <p>{item.main.temp.toFixed()}&deg;C</p>
+              </div>
+            ))
           ) : (
             <p>loading...</p>
           )}
-        </main>
+        </section>
       </main>
     </div>
   );

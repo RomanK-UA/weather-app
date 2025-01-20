@@ -46,11 +46,13 @@ export default function Sidebar({ weatherData, getLocation }) {
           <span>Rain - {data.main.humidity}%</span>
         </div>
       </section>
+      
+      {/* LOCATION IMAGE */}
       <section className="flex justify-center">
-        <div className="w-full h-48 md:h-52 rounded-3xl overflow-hidden relative">
+        <div className="w-full max-w-[400px] rounded-3xl overflow-hidden relative aspect-video-16/9">
           <img src="town.jpg" alt="" className="w-full h-full object-cover" />
           <p className="absolute inset-0 flex items-center justify-center text-3xl text-white bg-black/30 rounded-3xl">
-            {city + ", " + country}
+            {`${city}, ${country}`}
           </p>
         </div>
       </section>
