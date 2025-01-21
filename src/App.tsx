@@ -5,21 +5,20 @@ import TabButton from "./components/TabButton";
 import DegreeButton from "./components/DegreeButton";
 import filterByCurrentDay from "./utils/filterByCurrentDay";
 import WeeklyForecast from "./components/WeeklyForecast";
+import InfoCard from "./components/InfoCard";
 type Location = {
   latitude: number;
   longitude: number;
-}
+};
 
 function App() {
   const [location, setLocation] = useState<Location | null>(null);
-  const [error, setError] = useState("");
   const [weatherData, setWeatherData] = useState(null);
   const [activeTab, setActiveTab] = useState<"Today" | "Week">("Today");
   const prevLocation = useRef<Location | null>(null);
 
   const todayWeather = weatherData ? filterByCurrentDay(weatherData.list) : [];
-
-
+  
   const handleTabChange = useCallback((tabName: "Today" | "Week") => {
     setActiveTab(tabName);
   }, []);
@@ -34,12 +33,11 @@ function App() {
           });
         },
         (error) => {
-          console.error("Error getting location", error);
-          setError("Error getting location");
+          alert("Error getting location" + error.message);
         }
       );
     } else {
-      setError("Geolocation is not supported by this browser.");
+      alert("Geolocation is not supported by this browser.");
     }
   }, []);
 
@@ -48,8 +46,10 @@ function App() {
   }, [getLocation]);
 
   useEffect(() => {
-    if(  location?.latitude === prevLocation.current?.latitude &&
-      location?.longitude === prevLocation.current?.longitude) {
+    if (
+      location?.latitude === prevLocation.current?.latitude &&
+      location?.longitude === prevLocation.current?.longitude
+    ) {
       return;
     }
     const fetchWeatherData = async () => {
@@ -66,7 +66,7 @@ function App() {
           setWeatherData(data);
           console.log(data);
         } catch (err) {
-          setError(err.message);
+          console.log(err.message);
         }
       }
     };
@@ -104,26 +104,51 @@ function App() {
             </div>
           </section>
         </header>
-        { activeTab === "Today" ? (
-          <section>
-            Today
-          </section>
-         ) : (
+        {activeTab === "Today" ? (
+          <section>Today</section>
+        ) : (
           <section>
             <WeeklyForecast data={weatherData} />
           </section>
-         )
-
-        }
+        )}
         {/* Today's highlights */}
-        <section>
+        <section className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold py-8">
+            Today's highlights
+          </h1>
           {weatherData ? (
-             todayWeather.map((item) => (
-              <div key={item.dt} className="flex justify-between items-center border-b-2 border-gray-300 py-4">
-                <p>{item.dt_txt}</p>
-                <p>{item.main.temp.toFixed()}&deg;C</p>
+              <div className="flex justify-between items-center border-b-2 border-gray-300 py-4">
+                  <InfoCard
+                    title="Wind Status"
+                    mainContent={
+                      <div>
+                        7.70 <span className="text-sm">km/h</span>
+                      </div>
+                    }
+                    footerText="WSW"
+                  />
+                  <InfoCard
+                    title="Humidity"
+                    mainContent="12%"
+                    footerText="Normal"
+                    footerEmoji="👍"
+                  />
+                  <InfoCard
+                    title="Visibility"
+                    mainContent="5.2 km"
+                    footerText="Average"
+                    footerEmoji="😐"
+                  />
+                  <InfoCard
+                    title="Air Quality"
+                    mainContent="105"
+                    footerText="Unhealthy"
+                    footerEmoji="👎"
+                  />
+
+                {/* <p>{item.dt_txt}</p>
+                <p>{item.main.temp.toFixed()}&deg;C</p> */}
               </div>
-            ))
           ) : (
             <p>loading...</p>
           )}

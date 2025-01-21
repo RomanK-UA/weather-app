@@ -1,7 +1,6 @@
 import WeatherCard from './WeatherCard'
 import { getWeatherIcon } from '../utils/getWeatherIcon'
 import  getDay from '../utils/getDay'
-import { div } from 'motion/react-client';
 
 export default function WeeklyForecast({ data }) {
     // Function to extract one forecast per day
@@ -23,7 +22,7 @@ export default function WeeklyForecast({ data }) {
     const dailyForecasts = getOneForecastPerDay(data.list);
   
     return (
-      <div className='py-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
+      <div className='py-14 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {dailyForecasts.map((item) => {
           const icon = getWeatherIcon(item.weather[0].main); // Get the correct icon for each day's weather
           return (
