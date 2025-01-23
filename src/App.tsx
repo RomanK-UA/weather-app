@@ -6,6 +6,7 @@ import DegreeButton from "./components/DegreeButton";
 import filterByCurrentDay from "./utils/filterByCurrentDay";
 import WeeklyForecast from "./components/WeeklyForecast";
 import InfoCard from "./components/InfoCard";
+import WeatherDashboard from "./components/WeatherDashboard";
 type Location = {
   latitude: number;
   longitude: number;
@@ -18,7 +19,7 @@ function App() {
   const prevLocation = useRef<Location | null>(null);
 
   const todayWeather = weatherData ? filterByCurrentDay(weatherData.list) : [];
-  
+
   const handleTabChange = useCallback((tabName: "Today" | "Week") => {
     setActiveTab(tabName);
   }, []);
@@ -83,26 +84,24 @@ function App() {
         <p>Loading...</p>
       )}
 
-      <main className="flex-1 bg-gray-100 md:rounded-r-3xl p-4">
-        <header>
-          <section className="flex justify-between items-center">
-            <div className="flex gap-4 mt-4">
-              <TabButton
-                tabName="Today"
-                isActive={activeTab === "Today"}
-                onClick={handleTabChange.bind(null, "Today")}
-              />
-              <TabButton
-                tabName="Week"
-                isActive={activeTab === "Week"}
-                onClick={handleTabChange.bind(null, "Week")}
-              />
-            </div>
-            <div className="flex gap-4">
-              <DegreeButton units={"metric"} isActive={true} />
-              <DegreeButton units={"imperial"} isActive={false} />
-            </div>
-          </section>
+      <main className="flex-1 bg-gray-100 md:rounded-r-3xl p-10">
+        <header className="flex justify-between items-center">
+          <div className="flex gap-4 mt-4">
+            <TabButton
+              tabName="Today"
+              isActive={activeTab === "Today"}
+              onClick={handleTabChange.bind(null, "Today")}
+            />
+            <TabButton
+              tabName="Week"
+              isActive={activeTab === "Week"}
+              onClick={handleTabChange.bind(null, "Week")}
+            />
+          </div>
+          <div className="flex gap-4">
+            <DegreeButton units={"metric"} isActive={true} />
+            <DegreeButton units={"imperial"} isActive={false} />
+          </div>
         </header>
         {activeTab === "Today" ? (
           <section>Today</section>
@@ -112,43 +111,13 @@ function App() {
           </section>
         )}
         {/* Today's highlights */}
-        <section className="grid grid-cols-2 gap-4 md:grid-cols-3">
+        <section className="gap-4">
           <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold py-8">
             Today's highlights
           </h1>
-          {weatherData ? (
-              <div className="flex justify-between items-center border-b-2 border-gray-300 py-4">
-                  <InfoCard
-                    title="Wind Status"
-                    mainContent={
-                      <div>
-                        7.70 <span className="text-sm">km/h</span>
-                      </div>
-                    }
-                    footerText="WSW"
-                  />
-                  <InfoCard
-                    title="Humidity"
-                    mainContent="12%"
-                    footerText="Normal"
-                    footerEmoji="👍"
-                  />
-                  <InfoCard
-                    title="Visibility"
-                    mainContent="5.2 km"
-                    footerText="Average"
-                    footerEmoji="😐"
-                  />
-                  <InfoCard
-                    title="Air Quality"
-                    mainContent="105"
-                    footerText="Unhealthy"
-                    footerEmoji="👎"
-                  />
 
-                {/* <p>{item.dt_txt}</p>
-                <p>{item.main.temp.toFixed()}&deg;C</p> */}
-              </div>
+          {weatherData ? (
+            <WeatherDashboard weather={todayWeather[0]} />
           ) : (
             <p>loading...</p>
           )}
