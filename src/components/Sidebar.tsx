@@ -3,7 +3,7 @@ import { MdLocationSearching } from "react-icons/md";
 import { FiCloud } from "react-icons/fi";
 import { FiCloudRain } from "react-icons/fi";
 
-export default function Sidebar({ weatherData, getLocation }) {
+export default function Sidebar({ weatherData, getLocation, units }) {
   const today = new Date().toLocaleString("en-US", { weekday: "long" });
   const data = weatherData.list[0];
   const city = weatherData?.city?.name || "Unknown";
@@ -31,7 +31,7 @@ export default function Sidebar({ weatherData, getLocation }) {
         <p className="text-5xl md:text-6xl lg:text-8xl self-start">
           <span className="">{data.main.temp.toFixed()}</span>
           <sup>&deg;</sup>
-          <sup>C</sup>
+          <sup>{units === "metric" ? "C" : "F"}</sup>
         </p>
         <p className="text-3xl self-start">{today}</p>
       </section>

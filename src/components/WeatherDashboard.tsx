@@ -2,7 +2,7 @@ import InfoCard from "./InfoCard";
 import determinePressureCategory from "../utils/determinePressureCategory";
 import determineWindDirection from "../utils/determineWindDirection";
 import Slider from "./Slider";
-export default function WeatherDashboard({ weather }) {
+export default function WeatherDashboard({ weather, units }) {
     const windSpeed = (weather.wind.speed * 3.6).toFixed(1); //convert m/s to km/h
     const windDirection = determineWindDirection(weather.wind.deg);
     const humidity: number = weather.main.humidity;
@@ -15,7 +15,7 @@ export default function WeatherDashboard({ weather }) {
         mainContent={
           <div>
             {/*convert m/s to km/h*/}
-            <span>{windSpeed}</span> <span className="text-sm">km/h</span> 
+            <span>{windSpeed}</span> <span className="text-sm">{units === "metric" ? "km/h" : "m/h"}</span> 
           </div>
         }
         footer={

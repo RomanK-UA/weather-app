@@ -10,7 +10,6 @@ export default function WeeklyForecast({ data }) {
         const day = new Date(item.dt_txt).toISOString().split("T")[0]; // Extract date (YYYY-MM-DD)
         if (!uniqueDays.has(day)) {
           uniqueDays.add(day);
-          console.log(day)
           return true; // Include the first item for each day
 
         }
