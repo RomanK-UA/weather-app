@@ -6,6 +6,7 @@ import DegreeButton from "./components/DegreeButton";
 import filterByCurrentDay from "./utils/filterByCurrentDay";
 import WeeklyForecast from "./components/WeeklyForecast";
 import WeatherDashboard from "./components/WeatherDashboard";
+import DailyForecast from "./components/DailyForecast";
 
 type Location = {
   latitude: number;
@@ -38,6 +39,7 @@ function App() {
       const data = await response.json();
       setWeatherData(data);
       prevLocation.current = location;
+      console.log(data);
     } catch (error: any) {
       console.error("Error fetching weather data:", error.message);
     } finally {
@@ -122,10 +124,12 @@ function App() {
               </div>
             </header>
             {activeTab === "Today" ? (
-              <section>Today</section>
+              <section>
+                <DailyForecast data={weatherData.list} />
+              </section>
             ) : (
               <section>
-                <WeeklyForecast data={weatherData} />
+                <WeeklyForecast data={weatherData.list} />
               </section>
             )}
             <section className="gap-4">

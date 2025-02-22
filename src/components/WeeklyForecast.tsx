@@ -18,12 +18,13 @@ export default function WeeklyForecast({ data }) {
     };
   
     // Get one forecast per day from the provided data
-    const dailyForecasts = getOneForecastPerDay(data.list);
+    const dailyForecasts = getOneForecastPerDay(data);
   
     return (
       <div className='py-14 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
         {dailyForecasts.map((item) => {
           const icon = getWeatherIcon(item.weather[0].main); // Get the correct icon for each day's weather
+          console.log(item.weather[0].main)
           return (
             <div key={item.dt_txt} className='flex justify-center'>
                 <WeatherCard
